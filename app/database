@@ -1,0 +1,19 @@
+CREATE DATABASE mydatabase;
+USE mydatabase;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    photography VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    photo VARCHAR(255) NULL,
+    location VARCHAR(255) NULL
+);

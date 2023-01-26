@@ -1,0 +1,153 @@
+const express = require('express');
+const mysql = require('mysql2');
+
+const app = express();
+
+// Create a connection to the database
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'password',
+  database: 'mydatabase'
+});
+
+// Connect to the database
+connection.connect();
+
+// Get all users from the database
+app.get('/users', (req, res) => {
+  connection.query('SELECT * FROM users', (error, results) => {
+    if (error) {
+      res.status(500).json({ error });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+// Get a single user by ID
+app.get('/users/:id', (req, res) => {
+  connection.query('SELECT * FROM users WHERE id = ?', [req.params.id], (error, results) => {
+    if (error) {
+      res.status(500).json({ error });
+    } else {
+      res.json(results[0]);
+    }
+  });
+});
+
+// Get all notes from the database
+app.get('/notes', (req, res) => {
+  connection.query('SELECT * FROM notes', (error, results) => {
+    if (error) {
+      res.status(500).json({ error });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+// Get a single note by ID
+app.get('/notes/:id', (req, res) => {
+  connection.query('SELECT * FROM notes WHERE id = ?', [req.params.id], (error, results) => {
+    if (error) {
+      res.status(500).json({ error });
+    } else {
+      res.json(results[0]);
+    }
+  });
+});
+
+// Start the server
+app.listen(3000, () => {
+  console.log('Server started on http://localhost:3000');
+});
+
+// Add a new note to the database
+app.post('/notes', (req, res) => {
+  connection.query(
+    'INSERT INTO notes (title, description, photo, location) VALUES (?, ?, ?, ?)',
+    [req.body.title, req.body.description, req.body.photo, req.body.location],
+    (error, results) => {
+      if (error) {
+        res.status(500).json({ error });
+      } else {
+        res.json(results);
+      }
+    }
+  );
+});
+
+// Update an existing note in the database
+app.put('/notes/:id', (req, res) => {
+  connection.query(
+    'UPDATE notes SET title = ?, description = ?, photo = ?, location = ? WHERE id = ?',
+    [req.body.title, req.body.description, req.body.photo, req.body.location, req.params.id],
+    (error, results) => {
+      if (error) {
+        res.status(500).json({ error });
+      } else {
+        res.json(results);
+      }
+    }
+  );
+});
+
+// Delete a note from the database
+app.delete('/notes/:id', (req, res) => {
+  connection.query('DELETE FROM notes WHERE id = ?', [req.params.id], (error, results) => {
+    if (error) {
+      res.status(500).json({ error });
+    } else {
+      res.json(results);
+    }
+
+
+})
+
+// Add a new user to the database
+app.post('/users', (req, res) => {
+  connection.query(
+    'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+    [req.body.name, req.body.email, req.body.password],
+    (error, results) => {
+      if (error) {
+        res.status(500).json({ error });
+      } else {
+        res.json(results);
+      }
+    }
+  );
+});
+
+// Update an existing user in the database
+app.put('/users/:id', (req, res) => {
+  connection.query(
+    'UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?',
+    [req.body.name, req.body.email, req.body.password, req.params.id],
+    (error, results) => {
+      if (error) {
+        res.status(500).json({ error });
+      } else {
+        res.json(results);
+      }
+    }
+  );
+});
+
+// Delete a user from the database
+app.delete('/users/:id', (req, res) => {
+  connection.query('DELETE FROM users WHERE id = ?', [req.params.id], (error, results) => {
+    if (error) {
+      res.status(500).json({ error });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+// Start the server
+app.listen(3000, () => {
+  console.log('Server started on http://localhost:3000');
+});
+
